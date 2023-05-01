@@ -11,16 +11,15 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@clu
 app.use(cors());
 app.use(express.static('public'));
 
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 
-async function run() {
-  const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    }
-  });
-  
+async function getDataFromDB() {
   await client.connect();
 
   const dbName = "authentication"
@@ -31,25 +30,22 @@ async function run() {
 
   try {
     const cursor = await collection.find({})
+    to_return = []
     await cursor.forEach(credentials => {
       console.log(credentials)
+      to_return.push(credentials)
     })
+    return to_return
   } catch (err) {
     console.error(err)
   }
 }
-run().catch(console.dir);
 
-
-function getDataFromDB() {
-
-}
-
-app.get('/db', (req, res) => {
+app.get('/admin', async (req, res) => {
   console.log('Searching db...')
   res.send({
     success: true,
-    data: getDataFromDB()
+    data: await getDataFromDB()
   })
 });
 
