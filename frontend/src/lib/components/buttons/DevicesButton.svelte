@@ -1,14 +1,25 @@
 <script lang="ts">
+  import { displayDeviceState } from "../../stores/stores";
 
+  let isDeviceState;
+
+  displayDeviceState.subscribe(value => {
+    isDeviceState = value;
+  })
 
   function handleClick() {
-    alert('TODO; Render devices page')
+    isDeviceState = !isDeviceState
+    displayDeviceState.set(isDeviceState)
   }
 </script>
 
 <main>
   <button on:click={handleClick}>
+    {#if isDeviceState}
+      Dashboard
+    {:else}
       Enheder
+    {/if}
   </button>
 </main>
 

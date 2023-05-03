@@ -3,7 +3,7 @@
 </script>
 
 <main>
-	<Renderer isAdmin={false}/>
+	<Renderer isAdmin={true}/>
 </main>
 
 <style>
