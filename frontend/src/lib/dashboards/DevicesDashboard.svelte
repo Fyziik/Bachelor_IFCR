@@ -1,11 +1,11 @@
 <script lang="ts">
-  export let leaderName;
+  export let name;
+  export let data;
 
-  import { onMount } from 'svelte';
-  import { getAllAdmins } from "../api/api";
-	import DataTable from '../components/table/Table.svelte';
+	import DataTable from '../components/table/AdminTable.svelte';
   import DevicesButton from '../components/buttons/DevicesButton.svelte';
 	
+  //Data shouldn't be requested all the time, but cached
 	const columns = [
     {
       header: 'ID',
@@ -37,21 +37,16 @@
     }
   ];
 
-  let data = null;
-  onMount(async () => {
-		const res = await getAllAdmins();
-    data = res.data
-	});
   
 </script>
 
 <main>
-  <h1>Velkommen {leaderName}</h1>
+  <h1>Velkommen {name}</h1>
   <DevicesButton />
   {#if data}
-    <DataTable columns={columns} data={data} />
+    <DataTable {data} />
   {:else}
-    <h1>Fetching data</h1>
+    <h1>Fetching data</h1> <!--Should be replaced with an actual loading spinner-->
   {/if}
 </main>
 

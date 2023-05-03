@@ -24,6 +24,16 @@ existing_vulnerabilities = [
 def generate_random_bool(random) -> bool:
     return bool(random.randint(0, 1))
 
+def generate_random_importance(random) -> str:
+    random_num = random.randint(0, 10)
+    if random_num < 3:
+        return 'low'
+    elif random_num > 2 and random_num < 7:
+        return 'medium'
+    else:
+        return 'high'
+
+
 def create_vuln(fake, random, time_now) -> dict:
     chosen_vuln = random.choice(existing_vulnerabilities)
     my_dict = {
@@ -31,6 +41,7 @@ def create_vuln(fake, random, time_now) -> dict:
         "target_ip": f'{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}',
         "target_name": fake.bs(),
         "port": random.randint(0, 65536),
+        "importance": generate_random_importance(random),
         "qod": f'{random.randint(0, 100)}%',
         "date_found": time_now,
         "solution": chosen_vuln['solution'],

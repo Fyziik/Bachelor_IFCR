@@ -4,6 +4,10 @@ export const getAllAdmins = async () => {
   return httpGet(`${base}/admin`).then(res => res.json());
 }
 
+export const getTestData = async () => {
+  return httpGet(`${base}/test`).then(res => res.json());
+}
+
 function httpGet(url) {
   return fetch(url);
 }

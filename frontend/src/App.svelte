@@ -3,7 +3,7 @@
 </script>
 
 <main>
-	<Renderer isAdmin={true}/>
+	<Renderer/>
 </main>
 
 <style>

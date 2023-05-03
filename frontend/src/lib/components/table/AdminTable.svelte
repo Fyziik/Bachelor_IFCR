@@ -1,9 +1,10 @@
 <script>
-	export let columns;
 	export let data;
 
   import ArchiveButton from "../buttons/ArchiveButton.svelte";
   import FalsePositiveButton from "../buttons/FalsePositiveButton.svelte";
+
+	const columns = ['ID','Sårbarhed', 'Ansat', 'Relevans', 'Status', 'Dato fundet', 'Dato rettet', 'Archive', 'False-positve'];
 
 </script>
 
@@ -13,26 +14,33 @@
 			<tr>
 				{#each columns as column}
 					<td>
-						{column.header}
+						{column}
 					</td>
 				{/each}
-        <td></td>
-        <td></td>
 			</tr>
 		</thead>
 
-		{#each data as row}
-			<tr>
-				{#each columns as column}
-					<td>
-						{row[column.accessor]}
-					</td>
+		<!--For each employee under admin-->
+		{#each data as user}
+			<!--For each device a user has-->
+			{#each user.device_data as device}
+				{#each device.vulnerabilities as vuln}
+					<tr>
+						<td>0</td>
+						<td>{vuln.vulnerability_name}</td>
+						<td>{user.user_data.name}</td>
+						<td>{vuln.importance}</td>
+						<td>{vuln.status}</td>
+						<td>{vuln.date_found}</td>
+						<td>None yet</td>
+						<td><ArchiveButton /></td>
+						<td><FalsePositiveButton /></td>
+					</tr>
 				{/each}
-        <td><ArchiveButton /></td>
-        <td><FalsePositiveButton /></td>
-			</tr>
+			{/each}
 		{/each}
-	</table>	
+
+	</table>
 </div>
 
 <style>
