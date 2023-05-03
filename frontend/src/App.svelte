@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Data from "./lib/Data.svelte";
-	export let name: string;
+	export let name: string = 'test';
+	export let test: string = 'test string'
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
+	<h1>Hello {test}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
 	<Data />
 </main>

@@ -13,7 +13,8 @@
 <main>
   {#if admins}
     {#each admins as admin}
-      {admin.username}
+      {admin.name}
+      <br>
     {/each}
   {:else}
     <h1>Fetching data</h1>

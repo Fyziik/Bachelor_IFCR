@@ -1,7 +1,6 @@
 const base = 'http://localhost:5000';
 
 export const getAllAdmins = async () => {
-  //return 'Hello'
   return httpGet(`${base}/admin`).then(res => res.json());
 }
 
