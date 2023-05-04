@@ -1,9 +1,10 @@
 <script>
 	export let data;
 
-  import ArchiveButton from "../buttons/ArchiveButton.svelte";
-  import FalsePositiveButton from "../buttons/FalsePositiveButton.svelte";
+	import RowButton from "../buttons/RowButton.svelte";
 
+	const archive_icon_url = 'https://static.thenounproject.com/png/21032-200.png' 
+	const false_positive_icon_url = 'https://thumbs.dreamstime.com/b/false-positive-flat-icon-illustration-style-isolated-raster-image-white-background-232822695.jpg'
 	const columns = ['ID','Sårbarhed', 'Ansat', 'Relevans', 'Status', 'Dato fundet', 'Dato rettet', 'Archive', 'False-positve'];
 
 </script>
@@ -33,8 +34,8 @@
 						<td>{vuln.status}</td>
 						<td>{vuln.date_found}</td>
 						<td>{vuln.date_changed}</td>
-						<td><ArchiveButton /></td>
-						<td><FalsePositiveButton /></td>
+						<td><RowButton imageUrl={archive_icon_url} typeOfButton={'archive'} id={0}/></td>
+						<td><RowButton imageUrl={false_positive_icon_url} typeOfButton={'false_positive'} id={0}/></td>
 					</tr>
 				{/each}
 			{/each}
