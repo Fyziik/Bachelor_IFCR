@@ -32,7 +32,7 @@
 						<td>{vuln.importance}</td>
 						<td>{vuln.status}</td>
 						<td>{vuln.date_found}</td>
-						<td>None yet</td>
+						<td>{vuln.date_changed}</td>
 						<td><ArchiveButton /></td>
 						<td><FalsePositiveButton /></td>
 					</tr>

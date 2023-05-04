@@ -8,12 +8,12 @@ import create_vulns, create_admins,create_companies, create_users, create_device
             - name: str
             - cvr: str
 
-        ADMIN - 1:many relationship with users
+        ADMIN - 1:many relationship with users (maybe not have an entire "admin" table, but just users with roles attached. would make it easier to always compare roles)
             - id: num
             - name: str
             - password: str
             - creation_date: str
-            - changed_date: str
+            - changed_date: str (is this required? we don't change anything about admins)
         
         USER - 1:many relationship with devices
             - id: num
@@ -36,6 +36,7 @@ import create_vulns, create_admins,create_companies, create_users, create_device
             - importance: str
             - qod: num
             - first_occurance: str
+            - changed_date: str (should update whenever a vuln. has changed in status, been archived or marked false-positive)
             - solution: str
             - external_references: str / array / delimiter
             - proof: str
@@ -61,7 +62,7 @@ if __name__ == "__main__":
         user = create_users.create_user(fake, random)
         array_of_devices = [create_devices.create_device(fake, random) for x in range(random.randint(1, 5))]
         for device in array_of_devices:
-            device['vulnerabilities'] = [create_vulns.create_vuln(fake, random, time_now) for x in range(random.randint(1, 5))]
+            device['vulnerabilities'] = [create_vulns.create_vuln(fake, random, time_now, time_changed) for x in range(random.randint(1, 5))]
         collected_user = {
             "user_data": user,
             "device_data": array_of_devices

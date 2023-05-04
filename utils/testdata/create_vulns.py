@@ -32,9 +32,18 @@ def generate_random_importance(random) -> str:
         return 'medium'
     else:
         return 'high'
+    
+def generate_random_status(random) -> str:
+    random_num = random.randint(0, 10)
+    if random_num < 3:
+        return 'new'
+    elif random_num > 2 and random_num < 7:
+        return 'in progress'
+    else:
+        return 'complete'
 
 
-def create_vuln(fake, random, time_now) -> dict:
+def create_vuln(fake, random, time_now, time_changed) -> dict:
     chosen_vuln = random.choice(existing_vulnerabilities)
     my_dict = {
         "vulnerability_name": chosen_vuln['vuln_name'],
@@ -44,10 +53,11 @@ def create_vuln(fake, random, time_now) -> dict:
         "importance": generate_random_importance(random),
         "qod": f'{random.randint(0, 100)}%',
         "date_found": time_now,
+        "date_changed": time_changed,
         "solution": chosen_vuln['solution'],
         "references": chosen_vuln['references'],
         "proof": chosen_vuln['proof'],
-        "status": generate_random_bool(random),
+        "status": generate_random_status(random),
         "archived": generate_random_bool(random),
         "false_positive": generate_random_bool(random),
         "step_guide_link": fake.url(),

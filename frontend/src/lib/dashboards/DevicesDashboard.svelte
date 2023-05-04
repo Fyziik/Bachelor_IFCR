@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let name;
+  export let name = 'Enheder';
   export let data;
 
 	import DataTable from '../components/table/AdminTable.svelte';
@@ -41,7 +41,7 @@
 </script>
 
 <main>
-  <h1>Velkommen {name}</h1>
+  <h1>{name}</h1>
   <DevicesButton />
   {#if data}
     <DataTable {data} />
