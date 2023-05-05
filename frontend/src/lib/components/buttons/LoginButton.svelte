@@ -23,12 +23,12 @@
   import { loggedInUser } from '../../stores/stores'
 
   type userDTO = {
-    username: string,
-    password: string,
+    username: string
+    password: string
     role: string
   }
   type loginDTO = {
-    username: string,
+    username: string
     password: string
   }
   //For now, just use 2 pre-made logins from within application
@@ -64,5 +64,5 @@
 </script>
 
 <main>
-  <button on:click={handleClick}> Login </button>
+  <button on:click={handleClick}> login </button>
 </main>

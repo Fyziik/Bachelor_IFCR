@@ -2,10 +2,9 @@
 </style>
 
 <script lang="ts">
-	import Renderer from "./lib/Renderer.svelte";
-	const something = 'hello';
+  import Renderer from './lib/Renderer.svelte'
 </script>
 
 <main>
-  <Renderer/>
+  <Renderer />
 </main>

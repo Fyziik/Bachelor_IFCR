@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "npm run format && rollup -c -w",
     "start": "sirv public --no-clear",
     "check": "svelte-check",
     "format": "prettier --write ./src/**/*.{js,svelte,html,ts}",

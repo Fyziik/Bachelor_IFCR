@@ -29,7 +29,7 @@
 
 <main>
   <div class="container">
-    <h1>Login</h1>
+    <h1>Login Page</h1>
     <form class="content">
       <label>Username</label>
       <input type="text" bind:value={user.username} />

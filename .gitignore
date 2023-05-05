@@ -6,3 +6,5 @@
 
 /frontend/.DS_Store
 /frontend/.vscode
+
+/cypress/node_modules/
