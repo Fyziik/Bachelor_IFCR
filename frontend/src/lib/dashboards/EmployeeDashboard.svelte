@@ -1,9 +1,14 @@
-<script lang="ts">
-  export let name;
-  export let data;
+<style>
+  h1 {
+    text-align: center;
+  }
+</style>
 
-	import EmployeeTable from "../components/table/EmployeeTable.svelte";
-	
+<script lang="ts">
+  export let name: string
+  export let data: JSON
+
+  import EmployeeTable from '../components/table/EmployeeTable.svelte'
 </script>
 
 <main>
@@ -14,9 +19,3 @@
     <h1>Fetching data</h1>
   {/if}
 </main>
-
-<style>
-  h1 {
-      text-align: center;
-    }
-</style>
