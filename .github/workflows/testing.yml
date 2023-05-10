@@ -39,6 +39,7 @@ jobs:
         uses: actions/setup-node@v3
         with: 
           node-version: 18
+      - name: Install NPM dependencies
         run: npm i
       - name: Cypress run
         uses: cypress-io/github-action@v5
