@@ -25,12 +25,12 @@ jobs:
         uses: actions/setup-node@v3
         with: 
           node-version: 18
-      - run: cd..
+      - run: cd ..
       # Build Backend
       - run: cd backend
       - run: npm i
       - run: node server.js
-      - run: cd..
+      - run: cd ..
       
       # Build Frontend
       - run: |
