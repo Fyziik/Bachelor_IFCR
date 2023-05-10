@@ -41,6 +41,10 @@ jobs:
           npm install
           npm run dev &
           cd ..
+      
+      # Install testing deps
+      - run: |
+          npm install
   
   Cypress-test:
     runs-on: ubuntu-22.04
