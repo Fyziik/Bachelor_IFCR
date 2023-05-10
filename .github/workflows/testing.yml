@@ -14,7 +14,7 @@ jobs:
         with: 
           node-version: 18
       - name: Setup backend
-        working-directory: ~/backend
+        working-directory: ./backend
         run: |
           npm i
           node server.js
