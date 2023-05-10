@@ -20,6 +20,13 @@ jobs:
           npm i
           node server.js &
           cd ..
+          
+      - name: Setup frontend
+        run: |
+          cd frontend
+          npm i
+          npm run dev &
+          cd ..
   
 #  Cypress-test:
 #    runs-on: ubuntu-22.04
