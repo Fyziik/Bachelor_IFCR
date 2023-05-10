@@ -3,11 +3,15 @@ describe('template spec', () => {
     cy.visit('https://example.cypress.io')
   })
 
-  it('passes', () => {
+  it('goes to login page & clicks login', () => {
     cy.visit('http://localhost:8080')
 
     cy.contains('Login Page')
 
     cy.contains('login').click()
+  })
+
+  it('fails', () => {
+    expect(false).to.equal(true)
   })
 })
