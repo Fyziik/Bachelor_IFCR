@@ -43,6 +43,9 @@ jobs:
         run: |
           cd cypress 
           npm i
+          cd ..
       - name: Cypress run
-        run: npx cypress run
+        run: |
+          cd cypress
+          npx cypress run
           
