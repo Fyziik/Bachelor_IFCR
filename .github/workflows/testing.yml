@@ -29,6 +29,7 @@ jobs:
           cd ..
   
   Cypress-test:
+    needs: Build
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
