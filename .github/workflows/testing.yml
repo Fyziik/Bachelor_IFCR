@@ -41,8 +41,8 @@ jobs:
           node-version: 18
       - name: Install NPM dependencies
         run: |
-        cd cypress 
-        npm i
+          cd cypress 
+          npm i
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
