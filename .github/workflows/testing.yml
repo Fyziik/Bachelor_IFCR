@@ -30,17 +30,16 @@ jobs:
         
       # Build Backend
       - run: |
-          ls
           cd backend
           npm install
-          node server.js &
+          node server.js
           cd ..
       
       # Build Frontend
       - run: |
           cd frontend
           npm install
-          npm run dev &
+          npm run dev
           cd ..
       
       # Install testing deps
