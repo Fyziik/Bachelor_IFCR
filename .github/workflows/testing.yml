@@ -30,6 +30,7 @@ jobs:
         
       # Build Backend
       - run: |
+          ls
           cd backend
           npm install
           node server.js &
