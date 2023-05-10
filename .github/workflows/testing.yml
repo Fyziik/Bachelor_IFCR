@@ -18,7 +18,8 @@ jobs:
         run: |
           cd backend
           npm i
-          node server.js
+          node server.js &
+          cd ..
   
 #  Cypress-test:
 #    runs-on: ubuntu-22.04
