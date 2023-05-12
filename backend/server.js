@@ -1,65 +1,52 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
+
+const mysql = require('mysql2');
 
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 const path = require('path');
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ph69grw.mongodb.net/?retryWrites=true&w=majority`;
 app.use(cors());
 app.use(express.json())
 app.use(express.static('public'));
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'Rootbeer?',
+  database: 'blackstone',
+  port: 3308
 });
 
-async function adminsDatabaseCRUD(path, data_to_insert=null) {
-  await client.connect();
 
-  const dbName = "test"
-  const collectionName = "all_data"
-
-  const database = client.db(dbName)
-  const collection = database.collection(collectionName)
-
-  try {
-    if (path === 'get') { //retrieve from DB
-      const cursor = await collection.find({})
-      to_return = []
-      await cursor.forEach(credentials => {
-        to_return.push(credentials)
-      })
-      return to_return
-    } else if (path === 'post') { //insert into DB
-      let result =  await collection.insertOne(data_to_insert)
-      return result
+//Search for specific admin
+app.get('/admin', async (req, res) => {
+  connection.execute(
+    'SELECT * FROM admin WHERE `navn` = ?',
+    ['Henrik'],
+    function(err, results, fields) {
+      console.log(results); // results contains rows returned by server
     }
-  } catch (err) {
-    console.error(err)
-  }
-}
+  );
+});
 
-app.get('/test', async (req, res) => {
-  console.log('Searching admin db...')
-  res.send({
-    success: true,
-    data: await adminsDatabaseCRUD('get')
-  })
+//Find all admins
+app.get('/admins', async (req, res) => {
+  connection.query(
+    'SELECT * FROM admin',
+    function(err, results, fields) {
+      console.log(results); // results contains rows returned by server
+      res.send({data: results})
+    }
+  );
 });
 
 app.post('/test', async (req, res) => {
   console.log('inserting into admin db...')
   console.log(req.body)
-  //Insert the data into the db
-  let result = await adminsDatabaseCRUD('post', req.body)
-  res.send(result).status(204)
 });
 
 //Should return blank error page
