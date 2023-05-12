@@ -15,10 +15,10 @@ app.use(express.static('public'));
 
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: 'Rootbeer?',
-  database: 'blackstone',
-  port: 3308
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 

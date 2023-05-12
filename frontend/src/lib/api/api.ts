@@ -1,7 +1,7 @@
 const base = 'http://localhost:5000'
 
 export const getAllAdmins = async () => {
-  return httpGet(`${base}/admin`).then(res => res.json())
+  return httpGet(`${base}/admins`).then(res => res.json())
 }
 
 export const getTestData = async () => {

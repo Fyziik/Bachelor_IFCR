@@ -9,7 +9,6 @@ services:
   db:
     image: mysql:${MY_SQL_VERSION}
     container_name: db
-    #build: ./utils/sql
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     environment:
