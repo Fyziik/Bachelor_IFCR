@@ -6,9 +6,29 @@ services:
     ports:
       - "5000:5000"
 
+  db:
+    image: mysql:${MY_SQL_VERSION}
+    container_name: db
+    #build: ./utils/sql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - my-db:/var/lib/mysql
+      - ./utils/sql/scripts:/docker-entrypoint-initdb.d
+    ports:
+      - '3308:3306'
+
   frontend:
     build: ./frontend
     ports:
       - "8080:80"
     depends_on:
       - backend
+
+volumes:
+  my-db:
