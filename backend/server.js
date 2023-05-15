@@ -44,9 +44,51 @@ app.get('/admins', async (req, res) => {
   );
 });
 
-app.post('/test', async (req, res) => {
-  console.log('inserting into admin db...')
-  console.log(req.body)
+async function search_user_db(data) {
+  console.log('Searching users db...')
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'SELECT * FROM user WHERE `email` = ? AND `password` = ?',
+      [data.username, data.password],
+      function(err, results, fields) {
+        if (results.length > 0) {
+          results[0].role = 'employee'
+          resolve(results)
+        }
+        resolve(false)
+      }
+    );
+  })
+}
+
+async function search_admin_db(data) {
+  console.log('Searching admins db...')
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'SELECT * FROM admin WHERE `navn` = ? AND `password` = ?',
+      [data.username, data.password],
+      function(err, results, fields) {
+        if (results.length > 0) {
+          results[0].role = 'admin'
+          resolve(results)
+        }
+      }
+    );
+  })
+}
+
+//Attempt login
+app.post('/login', async (req, res) => {
+  //Try regular users first
+  data = req.body
+  let to_return = null
+  to_return = await search_user_db(data)
+  //If none found, try admin db
+  if (!to_return) {
+    to_return = await search_admin_db(data)
+  }
+  console.log(to_return)
+  res.send({"data": to_return[0]})
 });
 
 //Should return blank error page

@@ -21,45 +21,16 @@
   export let data_to_send: JSON
 
   import { loggedInUser } from '../../stores/stores'
+  import { login } from '../../api/api';
 
-  type userDTO = {
-    username: string
-    password: string
-    role: string
-  }
-  type loginDTO = {
-    username: string
-    password: string
-  }
-  //For now, just use 2 pre-made logins from within application
-  const user_db = [
-    {
-      username: 'admin_test',
-      password: 'admin',
-      role: 'admin' //admin role should probably be turned into something not so easily guessed, so people cant just easily create admin roles
-    },
-    {
-      username: 'employee_test',
-      password: 'employee',
-      role: 'employee'
-    }
-  ]
-
-  function check_credentials(data: loginDTO) {
-    let found = user_db.filter(db_user => {
-      if (db_user.username === data.username && db_user.password === data.password) {
-        return db_user
-      }
+  async function handleClick() {
+    let result = await login(data_to_send).then(x => {
+      return x
     })
-    if (found.length !== 0) {
-      return found[0]
+    if (result) {
+      loggedInUser.set(result)
     }
-    return { username: null, password: null, role: null }
-  }
-
-  function handleClick() {
-    //Check user credentials. If correct, set store loggedInUser to user
-    loggedInUser.set(check_credentials(data_to_send))
+    
   }
 </script>
 
