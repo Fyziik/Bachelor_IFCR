@@ -14,19 +14,17 @@
   import DevicesDashboard from './dashboards/DevicesDashboard.svelte'
   import Login from './components/login/Login.svelte'
   import { displayDeviceState, loggedInUser } from './stores/stores'
-  import { getTestData } from './api/api'
 
   displayDeviceState.subscribe(value => {
     isDeviceDisplay = value
   })
 
   loggedInUser.subscribe(value => {
-    userData = value
-    if (userData.username !== null) {
+    console.log(value)
+    if (value.username !== null) {
       isLoggedIn = true
-      name = userData.username
-      console.log(userData.role)
-      if (userData.role === 'admin') {
+      name = value.username
+      if (value.role === 'admin') {
         isAdmin = true
       } else {
         isAdmin = false
@@ -37,11 +35,6 @@
   let data
 
   onMount(async () => {
-    const res = await getTestData()
-    //Right now I'll only pick the first object, because each entire object is technically different companies, so I've picked the "first company"
-    data = res.data[2] //indexing at 1 because that company has multiple users
-    name = data.admin_data.name
-    data = data.user_data
   })
 </script>
 

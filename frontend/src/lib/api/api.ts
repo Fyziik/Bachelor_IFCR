@@ -1,11 +1,15 @@
 const base = 'http://localhost:5000'
 
 export const getAllAdmins = async () => {
-  return httpGet(`${base}/admin`).then(res => res.json())
+  return httpGet(`${base}/admins`).then(res => res.json())
 }
 
 export const getTestData = async () => {
   return httpGet(`${base}/test`).then(res => res.json())
+}
+
+export const login = async (data) => {
+  return httpPost(`${base}/login`, data).then(res => res.json())
 }
 
 function httpGet(url: string) {

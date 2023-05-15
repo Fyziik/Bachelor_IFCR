@@ -1,65 +1,123 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
+
+const mysql = require('mysql2');
 
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 const path = require('path');
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ph69grw.mongodb.net/?retryWrites=true&w=majority`;
 app.use(cors());
 app.use(express.json())
 app.use(express.static('public'));
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
-async function adminsDatabaseCRUD(path, data_to_insert=null) {
-  await client.connect();
+//Get user with relation data
 
-  const dbName = "test"
-  const collectionName = "all_data"
+//Get firm with all devices and vulnabilities.
 
-  const database = client.db(dbName)
-  const collection = database.collection(collectionName)
+//Update vulnabilities
 
-  try {
-    if (path === 'get') { //retrieve from DB
-      const cursor = await collection.find({})
-      to_return = []
-      await cursor.forEach(credentials => {
-        to_return.push(credentials)
-      })
-      return to_return
-    } else if (path === 'post') { //insert into DB
-      let result =  await collection.insertOne(data_to_insert)
-      return result
+//update devices
+
+
+//Search for specific admin
+app.get('/admin', async (req, res) => {
+  connection.execute(
+    'SELECT * FROM admin WHERE `name` = ?',
+    ['Henrik'],
+    function(err, results, fields) {
+      console.log(results); // results contains rows returned by server
     }
-  } catch (err) {
-    console.error(err)
-  }
+  );
+});
+
+
+//Search for admin with relation data (full get)
+app.get('/adminwith', async (req, res) => {
+  connection.execute(
+    `SELECT admin.adminid, admin.name, 
+    user.userid, user.email, 
+    device.deviceid, device.hostname,
+    vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port 
+    FROM admin
+    JOIN user ON admin.adminid = user.administratorid
+    JOIN device ON user.userid = device.asigned_user
+    JOIN vulnerability ON device.deviceid = vulnerability.device_id
+    WHERE admin.name = ?`,
+    ['Henrik'],
+    function(err, results, fields) {
+      console.log(results); // results contains rows returned by server
+    }
+  );
+});
+
+
+//Find all admins
+app.get('/admins', async (req, res) => {
+  connection.query(
+    'SELECT * FROM admin',
+    function(err, results, fields) {
+      console.log(results); // results contains rows returned by server
+      res.send({data: results})
+    }
+  );
+});
+
+async function search_user_db(data) {
+  console.log('Searching users db...')
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'SELECT * FROM user WHERE `email` = ? AND `password` = ?',
+      [data.username, data.password],
+      function(err, results, fields) {
+        if (results.length > 0) {
+          results[0].role = 'employee'
+          resolve(results)
+        }
+        resolve(false)
+      }
+    );
+  })
 }
 
-app.get('/test', async (req, res) => {
-  console.log('Searching admin db...')
-  res.send({
-    success: true,
-    data: await adminsDatabaseCRUD('get')
+async function search_admin_db(data) {
+  console.log('Searching admins db...')
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      'SELECT * FROM admin WHERE `navn` = ? AND `password` = ?',
+      [data.username, data.password],
+      function(err, results, fields) {
+        if (results.length > 0) {
+          results[0].role = 'admin'
+          resolve(results)
+        }
+      }
+    );
   })
-});
+}
 
-app.post('/test', async (req, res) => {
-  console.log('inserting into admin db...')
-  console.log(req.body)
-  //Insert the data into the db
-  let result = await adminsDatabaseCRUD('post', req.body)
-  res.send(result).status(204)
+//Attempt login
+app.post('/login', async (req, res) => {
+  //Try regular users first
+  data = req.body
+  let to_return = null
+  to_return = await search_user_db(data)
+  //If none found, try admin db
+  if (!to_return) {
+    to_return = await search_admin_db(data)
+  }
+  console.log(to_return)
+  res.send({"data": to_return[0]})
 });
 
 //Should return blank error page
