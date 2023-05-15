@@ -23,8 +23,8 @@ const client = new MongoClient(uri, {
 async function adminsDatabaseCRUD(path, data_to_insert=null) {
   await client.connect();
 
-  const dbName = "authentication"
-  const collectionName = "admins"
+  const dbName = "test"
+  const collectionName = "all_data"
 
   const database = client.db(dbName)
   const collection = database.collection(collectionName)
@@ -46,7 +46,7 @@ async function adminsDatabaseCRUD(path, data_to_insert=null) {
   }
 }
 
-app.get('/admin', async (req, res) => {
+app.get('/test', async (req, res) => {
   console.log('Searching admin db...')
   res.send({
     success: true,
@@ -54,7 +54,7 @@ app.get('/admin', async (req, res) => {
   })
 });
 
-app.post('/admin', async (req, res) => {
+app.post('/test', async (req, res) => {
   console.log('inserting into admin db...')
   console.log(req.body)
   //Insert the data into the db
