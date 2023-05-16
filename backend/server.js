@@ -43,22 +43,40 @@ app.get('/admin', async (req, res) => {
 
 
 //Search for admin with relation data (full get)
-app.get('/adminwith', async (req, res) => {
-  connection.execute(
-    `SELECT admin.adminid, admin.name, 
-    user.userid, user.email, 
-    device.deviceid, device.hostname,
-    vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port 
-    FROM admin
-    JOIN user ON admin.adminid = user.administratorid
-    JOIN device ON user.userid = device.asigned_user
-    JOIN vulnerability ON device.deviceid = vulnerability.device_id
-    WHERE admin.name = ?`,
-    ['Henrik'],
-    function(err, results, fields) {
-      console.log(results); // results contains rows returned by server
-    }
-  );
+async function search_full_admin_db(data) {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT admin.adminid, admin.name, 
+      user.userid, user.email, 
+      device.deviceid, device.hostname,
+      vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port 
+      FROM admin
+      JOIN user ON admin.adminid = user.administratorid
+      JOIN device ON user.userid = device.asigned_user
+      JOIN vulnerability ON device.deviceid = vulnerability.device_id
+      WHERE admin.name = ?`,
+      [data.username],
+      function(err, results, fields) {
+        if (results.length > 0) {
+          console.log(results)
+          resolve(results)
+        }
+        reject('None found')
+      }
+    );
+  })
+}
+
+/* app.post('/adminwith', async (req, res) => {
+  data = req.body
+  console.log(data)
+  response = await search_full_admin_db(data)
+  res.send({"data": response})
+}); */
+
+app.post('/adminwith', async (req, res) => {
+  data = req.body
+  console.log(data)
 });
 
 
@@ -98,6 +116,8 @@ async function search_admin_db(data) {
       [data.username, data.password],
       function(err, results, fields) {
         if (results.length > 0) {
+          results[0].username = results[0].navn
+          delete results[0].navn
           results[0].role = 'admin'
           resolve(results)
         }
@@ -116,7 +136,6 @@ app.post('/login', async (req, res) => {
   if (!to_return) {
     to_return = await search_admin_db(data)
   }
-  console.log(to_return)
   res.send({"data": to_return[0]})
 });
 

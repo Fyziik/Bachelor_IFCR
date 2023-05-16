@@ -8,8 +8,12 @@ export const getTestData = async () => {
   return httpGet(`${base}/test`).then(res => res.json())
 }
 
-export const login = async (data) => {
+export const login = async data => {
   return httpPost(`${base}/login`, data).then(res => res.json())
+}
+
+export const getInfoForAdmin = async data => {
+  return httpPost(`${base}/adminwith`, data).then(res => res.json())
 }
 
 function httpGet(url: string) {

@@ -21,16 +21,16 @@
   export let data_to_send: JSON
 
   import { loggedInUser } from '../../stores/stores'
-  import { login } from '../../api/api';
+  import { login } from '../../api/api'
 
   async function handleClick() {
     let result = await login(data_to_send).then(x => {
       return x
     })
     if (result) {
+      console.log(result)
       loggedInUser.set(result)
     }
-    
   }
 </script>
 
