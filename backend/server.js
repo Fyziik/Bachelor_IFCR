@@ -41,26 +41,33 @@ app.get('/admin', async (req, res) => {
 
 
 //Search for admin with relation data (full get)
-app.get('/adminwith', async (req, res) => {
-  connection.execute(
-    `SELECT admin.adminid, admin.name, 
-    user.userid, user.email, 
-    device.deviceid, device.hostname,
-    vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port, vulnerability.status_for_incident 
-    FROM admin
-    LEFT JOIN user ON admin.adminid = user.administratorid
-    LEFT JOIN device ON user.userid = device.asigned_user
-    LEFT JOIN vulnerability ON device.deviceid = vulnerability.device_id
-    WHERE admin.name = ?`,
-    ['Henrik'],
-    function(err, results, fields) {
-      res.send({data: results})
-      console.log(results); // results contains rows returned by server
-      if(err) console.log(err);
-    }
-  );
+app.post('/adminwith', async (req, res) => {
+  to_return = await get_full_db_admin(req.body)
+  res.send(to_return)
 });
 
+
+async function get_full_db_admin(data) {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `SELECT admin.adminid, admin.name, 
+      user.userid, user.email, 
+      device.deviceid, device.hostname,
+      vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port, vulnerability.status_for_incident 
+      FROM admin
+      LEFT JOIN user ON admin.adminid = user.administratorid
+      LEFT JOIN device ON user.userid = device.asigned_user
+      LEFT JOIN vulnerability ON device.deviceid = vulnerability.device_id
+      WHERE admin.name = ?`,
+      [data.username],
+      function(err, results, fields) {
+        if (results.length > 0) {
+          resolve(results)
+        }
+      }
+    );
+  })
+}
 
 //update devices
 app.get('/update', (req, res) => {
