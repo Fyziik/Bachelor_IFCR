@@ -27,8 +27,6 @@ const connection = mysql.createConnection({
 
 //Update vulnabilities
 
-//update devices
-
 
 //Search for specific admin
 app.get('/admin', async (req, res) => {
@@ -48,18 +46,73 @@ app.get('/adminwith', async (req, res) => {
     `SELECT admin.adminid, admin.name, 
     user.userid, user.email, 
     device.deviceid, device.hostname,
-    vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port 
+    vulnerability.vulnerabilityid, vulnerability.vulnerability_name, vulnerability.port, vulnerability.status_for_incident 
     FROM admin
-    JOIN user ON admin.adminid = user.administratorid
-    JOIN device ON user.userid = device.asigned_user
-    JOIN vulnerability ON device.deviceid = vulnerability.device_id
+    LEFT JOIN user ON admin.adminid = user.administratorid
+    LEFT JOIN device ON user.userid = device.asigned_user
+    LEFT JOIN vulnerability ON device.deviceid = vulnerability.device_id
     WHERE admin.name = ?`,
     ['Henrik'],
     function(err, results, fields) {
+      res.send({data: results})
       console.log(results); // results contains rows returned by server
+      if(err) console.log(err);
     }
   );
 });
+
+
+//update devices
+app.get('/update', (req, res) => {
+console.log("Update in progress..")
+connection.execute(
+  `UPDATE blackstone.device
+  SET
+  ip = ?,
+  hostname = ?,
+  asigned_user = ?
+  WHERE deviceid = ?`,
+  [12, "potatoHostname", 233111, 322111 ],
+  function(err, results, fields) {
+    if(err) console.log(err);
+  }
+  );
+});
+
+//Update vulnabilities
+async function Update_vulnabilities(data) {
+  return new Promise((resolve, reject) => {
+    connection.execute(
+      `UPDATE blackstoneone.vulnerability,
+      SET
+      vulnerability_name = ?,
+      target = ?,
+      target_name = ?,
+      port = ?,
+      relevance = ?,
+      QOD = ?,
+      solution = ?,
+      extern_references_for_solution = ?,
+      proof = ?,
+      status_for_incident = ?,
+      false_positive = ?,
+      step_guide_link = ?,
+      vulnerabilitycol = ?,
+      device_id = ?
+      WHERE vulnerabilityid = ?`,
+      [data.vulnerability_name, data.target, data.target_name, data.port, data.relevance, data.QOD, data.solution, data.extern_references_for_solution, 
+        data.proof, data.status_for_incident, data.false_positive, data.step_guide_link, data.vulnerabilitycol, data.device_id, data.vulnerabilityid],
+      function(err, results, fields) {
+        console.log(results);
+        if(err) console.log(err);
+        if (!err) {
+          resolve(results)
+        }
+        resolve(false)
+      }
+    );
+  })
+}
 
 
 //Find all admins
