@@ -8,7 +8,7 @@ export const getTestData = async () => {
   return httpGet(`${base}/test`).then(res => res.json())
 }
 
-export const login = async (data) => {
+export const login = async data => {
   return httpPost(`${base}/login`, data).then(res => res.json())
 }
 

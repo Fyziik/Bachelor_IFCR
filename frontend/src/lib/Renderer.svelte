@@ -34,8 +34,7 @@
 
   let data
 
-  onMount(async () => {
-  })
+  onMount(async () => {})
 </script>
 
 <main>
